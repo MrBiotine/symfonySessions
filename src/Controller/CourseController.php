@@ -17,8 +17,10 @@ class CourseController extends AbstractController
     #[Route('/', name: 'app_course_index', methods: ['GET'])]
     public function index(CourseRepository $courseRepository): Response
     {
+        $courses = $courseRepository->findBy([], ["nameCourse" => "ASC"]);
+
         return $this->render('course/index.html.twig', [
-            'courses' => $courseRepository->findAll(),
+            'courses' => $courses,
         ]);
     }
 

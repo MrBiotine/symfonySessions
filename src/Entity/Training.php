@@ -21,7 +21,7 @@ class Training
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $descriptionTraining = null;
 
-    #[ORM\OneToMany(mappedBy: 'training', targetEntity: Session::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'training', targetEntity: Session::class)]
     private Collection $sessions;
 
     public function __construct()

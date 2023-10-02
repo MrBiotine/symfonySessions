@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trainee{% endblock %}
+
+{% block body %}
+    <h1>Trainee</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ trainee.id }}</td>
+            </tr>
+            <tr>
+                <th>FirstNameTrainee</th>
+                <td>{{ trainee.firstNameTrainee }}</td>
+            </tr>
+            <tr>
+                <th>LastNameTrainee</th>
+                <td>{{ trainee.lastNameTrainee }}</td>
+            </tr>
+            <tr>
+                <th>EmailTrainee</th>
+                <td>{{ trainee.emailTrainee }}</td>
+            </tr>
+            <tr>
+                <th>GenderTrainee</th>
+                <td>{{ trainee.genderTrainee }}</td>
+            </tr>
+            <tr>
+                <th>CityTrainee</th>
+                <td>{{ trainee.cityTrainee }}</td>
+            </tr>
+            <tr>
+                <th>PhoneTrainee</th>
+                <td>{{ trainee.phoneTrainee }}</td>
+            </tr>
+            <tr>
+                <th>BirthDateTrainee</th>
+                <td>{{ trainee.birthDateTrainee ? trainee.birthDateTrainee|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_trainee_index') }}">back to list</a>
+
+    <a href="{{ path('app_trainee_edit', {'id': trainee.id}) }}">edit</a>
+
+    {{ include('trainee/_delete_form.html.twig') }}
+{% endblock %}

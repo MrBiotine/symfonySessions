@@ -17,6 +17,17 @@
             </tr>
         </tbody>
     </table>
+    <h2>Liste des modules</h2>
+
+    {% if category.courses | length > 0 %}
+        <ul>
+        {% for course in category.courses %}
+        <li><a href="{{ path('app_course_show', {'id': course.id}) }}">{{ course.nameCourse }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+    <p>il n'y a aucun module défini dans cette catégorie</p>
+    {% endif %}
 
     <a href="{{ path('app_category_index') }}">back to list</a>
 

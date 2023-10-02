@@ -27,7 +27,7 @@ class Session
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?training $training = null;
+    private ?Training $training = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     private ?Trainer $trainer = null;
@@ -85,12 +85,12 @@ class Session
         return $this;
     }
 
-    public function getTraining(): ?training
+    public function getTraining(): ?Training
     {
         return $this->training;
     }
 
-    public function setTraining(?training $training): static
+    public function setTraining(?Training $training): static
     {
         $this->training = $training;
 

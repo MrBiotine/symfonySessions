@@ -32,7 +32,7 @@ class Session
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     private ?Trainer $trainer = null;
 
-    #[ORM\OneToMany(mappedBy: 'session', targetEntity: Programm::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: Programm::class, cascade: ["persist"], orphanRemoval: true )]
     private Collection $programms;
 
     #[ORM\ManyToMany(targetEntity: Trainee::class, mappedBy: 'sessions')]
@@ -164,5 +164,8 @@ class Session
         }
 
         return $this;
+    }
+    public function __toString(){
+       return $this->getTraining()->getNameTraining();
     }
 }

@@ -39,6 +39,7 @@ class SessionController extends AbstractController
         return $this->render('session/new.html.twig', [
             'session' => $session,
             'form' => $form,
+            'sessionId' => $session->getId()
         ]);
     }
 
@@ -65,6 +66,7 @@ class SessionController extends AbstractController
         return $this->render('session/edit.html.twig', [
             'session' => $session,
             'form' => $form,
+            'sessionId' => $session->getId()
         ]);
     }
 
@@ -78,4 +80,5 @@ class SessionController extends AbstractController
 
         return $this->redirectToRoute('app_session_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 }

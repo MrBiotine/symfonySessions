@@ -23,7 +23,7 @@ class ProgrammType extends AbstractType
                 'choice_label' => 'nameCourse'
 
             ])
-            ->add('session', HiddenType::class)
+            // ->add('session', HiddenType::class)
             ->add('nbDay', IntegerType::class, [
                 'label' => 'Durée en jours',
                 'attr' => ['min' => '1', 'max' => '100'],

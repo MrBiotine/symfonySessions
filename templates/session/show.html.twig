@@ -12,19 +12,30 @@
                 <td>{{ session.training.nameTraining }}</td>
             </tr>
             <tr>
-                <th>DateBeginSession</th>
+                <th>Début de la session</th>
                 <td>{{ session.dateBeginSession ? session.dateBeginSession|date('d-m-Y') : '' }}</td>
             </tr>
             <tr>
-                <th>DateEndSession</th>
+                <th>Fin de la session</th>
                 <td>{{ session.dateEndSession ? session.dateEndSession|date('d-m-Y') : '' }}</td>
             </tr>
             <tr>
-                <th>NbMaxSession</th>
+                <th>Nombre de places</th>
                 <td>{{ session.nbMaxSession }}</td>
             </tr>
         </tbody>
     </table>
+    <h2>Programme de la session</h2>
+
+    {% if session.programms | length > 0 %}
+        <ul>
+        {% for programm in session.programms %}
+        <li><a href="{{ path('app_course_show', {'id': programm.course.id}) }}">{{ programm.course.nameCourse }}</a> pendant {{ programm.nbDay }} jours</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+    <p>Il n'y a pas encore de programme définie</p>
+    {% endif %}
 
     <a href="{{ path('app_session_index') }}">back to list</a>
 

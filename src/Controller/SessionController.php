@@ -7,6 +7,7 @@ use App\Entity\Trainee;
 use App\Form\SessionType;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,10 +46,10 @@ class SessionController extends AbstractController
     }
 //display session details
     #[Route('/{id}', name: 'app_session_show', methods: ['GET'])]
-    public function show(Session $session): Response
+    public function show(Session $session, SessionRepository $sessionRepository): Response
     {
 
-        $traineeNotInSession = $SessionRepository->getNonSubscriber($session->getId());
+        $traineeNotInSession = $sessionRepository->getNonSubscriber($session->getId());
         return $this->render('session/show.html.twig', [
             'session' => $session,
             'unregistredTrainee' => $traineeNotInSession,
@@ -89,15 +90,14 @@ class SessionController extends AbstractController
 
     
     #[Route("/session/removeTrainee/{idS}/{idT}", name: 'removeTrainee')]
-    // ParamConverter permet de convertir les parametres en instances de Session et de Stagiaire en utilisant l'injection de
-    // dependance de Doctrine pour recuper les entités correspondant à la base de donnée
-    #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
-    #[ParamConverter("intern", options:["mapping"=>["idT"=>"id"]])]
+    
+    // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
+    // #[ParamConverter("trainee", options:["mapping"=>["idT"=>"id"]])]
     
     public function removeStagiaire(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
     {
         $em = $doctrine->getManager();
-        $session->removeTrainee($intern);
+        $session->removeTrainee($trainee);
         $em->persist($session);
         $em->flush();
 
@@ -105,13 +105,13 @@ class SessionController extends AbstractController
     }  
     
     #[Route("/session/addTrainee/{idS}/{idI}", name: 'addTrainee')]    
-    #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
-    #[ParamConverter("intern", options:["mapping"=>["idI"=>"id"]])]
+    // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
+    // #[ParamConverter("trainee", options:["mapping"=>["idI"=>"id"]])]
     
     public function addTrainee(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
     {
         $em = $doctrine->getManager();
-        $session->addIntern($intern);
+        $session->addtrainee($trainee);
         $em->persist($session);
         $em->flush();
 

@@ -165,7 +165,13 @@ class Session
 
         return $this;
     }
+
     public function __toString(){
        return $this->getTraining()->getNameTraining();
+    }
+    //to count the number of registered trainees
+    public function getNbRegistered(): ?int
+    {
+        return count($this->trainees);                                        // count() pour compter le nombre de places restantes dans la collection stagiaires de l'entité Session.php
     }
 }

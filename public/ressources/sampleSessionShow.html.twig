@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails d'une session{% endblock %}
+
+{% block body %}
+    <div class="page">
+        {% if session %}
+            <div class="titrePage">
+                <h1>{{ session }} <a href="{{ path('edit_session', { id: session.id }) }}" class="boutonModification"><i class="fa-solid fa-pen-to-square"></i></a></h1>
+            </div>
+            <div class="details">
+                <h2><i>Détails :</i></h2>
+                {% if session.formateur %}
+                    <h3>Formateur référent : <i><a href="{{ path('show_formateur', { 'id' : session.formateur.id }) }}">{{ session.formateur }}</a></i></h3>
+                {% else %}
+                    <h3>Formateur référent : <i>Pas de formateur référent</i></h3>
+                {% endif %}
+                <p><b>Période : </b>{{ session.dateDebut | date("d/m/Y") }} - {{ session.dateFin | date("d/m/Y") }}</p>
+                <p><b>Nombre de places total : </b>{{ session.nombrePlaces }}</p>
+                <p><b>Nombre de place disponibles : </b>{{ session.nombrePlaces - (session.stagiaires | length) }}</p>
+                <p><b>Nombre total de modules : </b>{{ session.sessionModules | length }}</p>
+            </div>
+            <div class="deuxTableaux">
+                <div>
+                    <h2><i>PROGRAMME</i></h2>
+                    {% if session.sessionModules | length %}
+                        <table class="tableau petit">
+                            <thead>
+                                <tr>
+                                    <td>Module</td>
+                                    <td>Catégorie</td>
+                                    <td>Jours</td>
+                                    <td>Supprimer</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sessionModule in session.sessionModules %}
+                                    <tr>
+                                        <td><a href="{{ path('show_module', { 'id' : sessionModule.module.id }) }}">{{ sessionModule.module }}</a></td>
+                                        <td><a href="{{ path('show_categorie', { 'id' : sessionModule.module.categorie.id }) }}">{{ sessionModule.module.categorie }}</a></td>
+                                        <td>{{ sessionModule.nombreJours }}</td>
+                                        <td><a href="{{ path('deleteModule_session', { 'id' : sessionModule.session.id, module_id: sessionModule.module.id }) }}"><i class="fa-solid fa-trash"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="petit"><i>Pas de programme pour l'instant</i></p>
+                    {% endif %}
+                </div>
+                <div>
+                    <h2><i>MODULES AJOUTABLES</i></h2>
+                    {% if modulesPasDansSession | length %}
+                        <table class="tableau petit">
+                            <thead>
+                                <tr>
+                                    <td>Module</td>
+                                    <td>Catégorie</td>
+                                    <td>Jours</td>
+                                    <td>Ajouter</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for module in modulesPasDansSession %}
+                                    <tr>
+                                        <td><a href="{{ path('show_module', { 'id' : module.id }) }}">{{ module.libelle }}</a></td>
+                                        <td><a href="{{ path('show_categorie', { 'id' : module.categorie.id }) }}">{{ module.categorie }}</a></td>
+                                        <td colspan="2">
+                                            <form method="post" action="{{ path('addModule_session', { 'id' : session.id, 'module_id' : module.id }) }}" class="ajoutModuleSession">
+                                                <input type="number" name="nombreJours" id="nombreJours">
+                                                <input type="submit" value="+">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="petit"><i>Pas de modules ajoutables disponible</i></p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="deuxTableaux">
+                <div>
+                    <h2><i>STAGIAIRES INSCRITS</i></h2>
+                    {% if session.stagiaires | length %}
+                        <table class="tableau petit">
+                            <thead>
+                                <tr>
+                                    <td>Stagiaire</td>
+                                    <td>Désinscrire</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stagiaire in session.stagiaires %}
+                                    <tr>
+                                        <td><a href="{{ path('show_stagiaire', { 'id' : stagiaire.id }) }}">{{ stagiaire }}</a></td>
+                                        <td><a href="{{ path('unsubscribe_stagiaire', { 'id' : stagiaire.id, 'session_id' : session.id }) }}"><i class="fa-solid fa-xmark"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="petit"><i>Pas de stagiaire inscrits pour l'instant</i></p>
+                    {% endif %}
+                </div>
+                <div>
+                    <h2><i>STAGIAIRES AJOUTABLES</i></h2>
+                    {% if stagiairePasDansSession | length %}
+                        <table class="tableau petit">
+                            <thead>
+                                <tr>
+                                    <td>Stagiaire</td>
+                                    <td>Ajouter</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stagiaire in stagiairePasDansSession %}
+                                    <tr>
+                                        <td><a href="{{ path('show_stagiaire', { 'id' : stagiaire.id }) }}">{{ stagiaire }}</a></td>
+                                        {% if (session.nombrePlaces) - (session.stagiaires | length) > 0  %}
+                                            <td><a href="{{ path('addStagiaire_session', { 'id' : session.id, 'stagiaire_id' : stagiaire.id }) }}"><i class="fa-solid fa-plus"></i></a></td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="petit"><i>Pas de stagiaires ajoutables disponible</i></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock body %}

@@ -8,10 +8,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>DateBeginSession</th>
-                <th>DateEndSession</th>
-                <th>NbMaxSession</th>
+                <th>Intitulé</th>
+                <th>Début de la session</th>
+                <th>Fin de la session</th>
+                <th>nombre de place</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,12 +19,12 @@
         {% for session in sessions %}
             <tr>
                 <td>{{ session.id }}</td>
-                <td>{{ session.dateBeginSession ? session.dateBeginSession|date('Y-m-d') : '' }}</td>
-                <td>{{ session.dateEndSession ? session.dateEndSession|date('Y-m-d') : '' }}</td>
+                <td>{{ session.dateBeginSession ? session.dateBeginSession|date('d-m-Y') : '' }}</td>
+                <td>{{ session.dateEndSession ? session.dateEndSession|date('d-m-Y') : '' }}</td>
                 <td>{{ session.nbMaxSession }}</td>
                 <td>
-                    <a href="{{ path('app_session_show', {'id': session.id}) }}">show</a>
-                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+                    <a class="btn btn-outline-primary" href="{{ path('app_session_show', {'id': session.id}) }}">show</a>
+                    <a class="btn btn-outline-primary" href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

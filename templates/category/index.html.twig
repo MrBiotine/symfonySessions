@@ -8,24 +8,24 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>NameCategory</th>
+                <th>Intitulé</th>
+                <th>Nombre de module</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
+            <tr>                
                 <td>{{ category.nameCategory }}</td>
+                <td>{{ category.courses | length }}</td>
                 <td>
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+                    <a class="btn btn-outline-primary" href="{{ path('app_category_show', {'id': category.id}) }}">Détail</a>
+                    <a class="btn btn-outline-primary" href="{{ path('app_category_edit', {'id': category.id}) }}">Editer</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Pas d'enregistrements</td>
             </tr>
         {% endfor %}
         </tbody>

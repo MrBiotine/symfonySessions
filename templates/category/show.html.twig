@@ -20,9 +20,9 @@
     <h2>Liste des modules</h2>
 
     {% if category.courses | length > 0 %}
-        <ul>
+        <ul class="list-group list-group-flush">
         {% for course in category.courses %}
-        <li><a href="{{ path('app_course_show', {'id': course.id}) }}">{{ course.nameCourse }}</a></li>
+        <li class="list-group-item"><a href="{{ path('app_course_show', {'id': course.id}) }}">{{ course.nameCourse }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
@@ -31,7 +31,7 @@
 
     <a href="{{ path('app_category_index') }}">back to list</a>
 
-    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+    <a class="btn btn-outline-primary" href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
 
     {{ include('category/_delete_form.html.twig') }}
 {% endblock %}

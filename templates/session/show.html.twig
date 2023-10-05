@@ -28,9 +28,9 @@
     <h2>Programme de la session</h2>
 
     {% if session.programms | length > 0 %}
-        <ul>
+        <ul class="list-group list-group-flush">
         {% for programm in session.programms %}
-        <li><a href="{{ path('app_course_show', {'id': programm.course.id}) }}">{{ programm.course.nameCourse }}</a> pendant {{ programm.nbDay }} jours</li>
+        <li class="list-group-item"><a href="{{ path('app_course_show', {'id': programm.course.id}) }}">{{ programm.course.nameCourse }}</a> pendant {{ programm.nbDay }} jours</li>
         {% endfor %}
         </ul>
     {% else %}

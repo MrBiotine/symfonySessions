@@ -33,8 +33,9 @@ class SessionRepository extends ServiceEntityRepository
 
         // Selects all trainees registered in a session whose id is passed in parameters (sub query)
         $subQuery->select('t.id')
-                ->from('Trainee', 't')
-                ->join('t.sessions', 's')
+                ->from('App\Entity\Trainee;
+                ', 't')
+                ->join('t.trainee_session', 's')
                 ->where('s.id = :id')
                 ->setParameter('id', $session_id);
 
@@ -42,7 +43,8 @@ class SessionRepository extends ServiceEntityRepository
 
         // main query (query builder)  : Selects all trained unregistred <=> all trainee listed minus trainee registred in a session
         $qb->select('tr')
-        ->from('Trainee', 'tr')
+        ->from('App\Entity\Trainee;
+        ', 'tr')
         ->where($qb->expr()->notIn('tr.id', $subQuery->getDQL()))
         ->orderBy('tr.firstNameTrainee', 'ASC')
         ->setParameter('id', $session_id);
@@ -58,13 +60,14 @@ class SessionRepository extends ServiceEntityRepository
         $qb = $sub; // use the same QueryBuilder for the subquery
 
         $qb->select('s') // select the root alias
-            ->from('Trainee', 's') // the subquery is based on the same entity
-            ->leftJoin('s.sessions', 'se') // join the subquery
+            ->from('App\Entity\Trainee;
+            ', 's') // the subquery is based on the same entity
+            ->leftJoin('s.trainee_session', 'se') // join the subquery
             ->where('se.id = :id');
 
         $sub = $em->createQueryBuilder(); // create a new QueryBuilder
 
-        $sub->select('st')->from('Trainee', 'st')
+        $sub->select('st')->from('App\Entity\Trainee', 'st')
             ->where($sub->expr()->notIn('st.id', $qb->getDQL()))
             ->setParameter('id', $id);
 

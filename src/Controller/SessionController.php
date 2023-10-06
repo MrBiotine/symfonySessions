@@ -49,10 +49,10 @@ class SessionController extends AbstractController
     public function show(Session $session, SessionRepository $sessionRepository): Response
     {
 
-        $traineeNotInSession = $sessionRepository->getNonSubscriber($session->getId());
+        $traineeNotInSession = $sessionRepository->findByTraineesNotInSession($session->getId());
         return $this->render('session/show.html.twig', [
             'session' => $session,
-            'unregistredTrainee' => $traineeNotInSession,
+            'unsubscribedTrainee' => $traineeNotInSession,
         ]);
     }
 
@@ -86,15 +86,15 @@ class SessionController extends AbstractController
         return $this->redirectToRoute('app_session_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    //add or remove a trainee from a session
+    //add or remove a trainee from a session (subsribe and unsubsribe)
 
     
-    #[Route("/session/removeTrainee/{idS}/{idT}", name: 'removeTrainee')]
+    #[Route("/session/unsubscribeTrainee/{idS}/{idT}", name: 'removeTrainee')]
     
     // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
     // #[ParamConverter("trainee", options:["mapping"=>["idT"=>"id"]])]
     
-    public function removeStagiaire(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
+    public function unsubscribeTrainee(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
     {
         $em = $doctrine->getManager();
         $session->removeTrainee($trainee);
@@ -108,7 +108,7 @@ class SessionController extends AbstractController
     // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
     // #[ParamConverter("trainee", options:["mapping"=>["idI"=>"id"]])]
     
-    public function addTrainee(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
+    public function subsribeTrainee(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
     {
         $em = $doctrine->getManager();
         $session->addtrainee($trainee);

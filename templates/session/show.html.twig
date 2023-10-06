@@ -40,27 +40,27 @@
     <h2>Liste des stagiaires inscrits</h2>
     {% if session.trainees | length > 0 %}
         <ul class="list-group list-group-horizontal">
-        {% for trainee in session.trainee %}
+        {% for trainee in session.trainees %}
             {{ trainee.firstNameTrainee }} {{ trainee.lastNameTrainee }} 
-            <a class="btn btn-primary ml-2" href="{{ path('unsubscribeTrainee', { 'id' : trainee.id, 'session_id' : session.id }) }}">Désinscrire</a>
+            <a class="btn btn-primary btn-sm m-2" href="{{ path('unsubscribeTrainee', { 'idSession' : session.id, 'idTrainee' : trainee.id }) }}">Désinscrire</a>
         {% endfor %}
         </ul>
     {% else %}
     <p>Il n'a aucun stagiaires inscrits à cette session</p>
     {% endif %}
 
-    <h2>Liste des stagaires inscrivables</h2>
+    <h2>Liste des stagaires non inscrits</h2>
     <ul class="list-group list-group-horizontal">
-        {% for trainee in unsubscribe %}
+        {% for trainee in unsubscribedTrainee %}
             {{ trainee.firstNameTrainee }} {{ trainee.lastNameTrainee }}
             {% if (session.nbMaxSession) - (session.trainees | length) > 0 %}
-                <a class="btn btn-success ml-2" href="{{ path('subscribeTrainee', { 'id' : trainee.id, 'session_id' : session.id }) }}">Inscrire</a>
+                <a class="btn btn-success btn-sm m-2" href="{{ path('subsribeTrainee', {  'idSession' : session.id , 'idTrainee' : trainee.id}) }}">Inscrire</a>
             {% endif %} 
-            
+            {% else %}
+            <p>Inscription impossible</p>
         {% endfor %}
         </ul>
-    {% else %}
-    <p>Inscription impossible</p>
+    
 
     <a href="{{ path('app_session_index') }}">Liste des sessions</a>
 

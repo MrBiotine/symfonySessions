@@ -35,7 +35,7 @@ class SessionRepository extends ServiceEntityRepository
         $subQuery->select('t.id')
                 ->from('App\Entity\Trainee;
                 ', 't')
-                ->join('t.trainee_session', 's')
+                ->join('t.sessions', 's')
                 ->where('s.id = :id')
                 ->setParameter('id', $session_id);
 
@@ -52,7 +52,7 @@ class SessionRepository extends ServiceEntityRepository
         //the function returns the result as an array of trainee objects
         return $qb->getQuery()->getResult();
     }
-    public function findByTraineesNotInSession(int $id)
+    public function findByStagiairesNotInSession(int $id)
     {
         $em = $this->getEntityManager(); // get the EntityManager
         $sub = $em->createQueryBuilder(); // create a new QueryBuilder
@@ -60,9 +60,8 @@ class SessionRepository extends ServiceEntityRepository
         $qb = $sub; // use the same QueryBuilder for the subquery
 
         $qb->select('s') // select the root alias
-            ->from('App\Entity\Trainee;
-            ', 's') // the subquery is based on the same entity
-            ->leftJoin('s.trainee_session', 'se') // join the subquery
+            ->from('App\Entity\Trainee', 's') // the subquery is based on the same entity
+            ->leftJoin('s.sessions', 'se') // join the subquery
             ->where('se.id = :id');
 
         $sub = $em->createQueryBuilder(); // create a new QueryBuilder

@@ -49,7 +49,7 @@ class SessionController extends AbstractController
     public function show(Session $session, SessionRepository $sessionRepository): Response
     {
 
-        $traineeNotInSession = $sessionRepository->findByTraineesNotInSession($session->getId());
+        $traineeNotInSession = $sessionRepository->findByStagiairesNotInSession($session->getId());
         return $this->render('session/show.html.twig', [
             'session' => $session,
             'unsubscribedTrainee' => $traineeNotInSession,
@@ -89,33 +89,33 @@ class SessionController extends AbstractController
     //add or remove a trainee from a session (subsribe and unsubsribe)
 
     
-    #[Route("/session/unsubscribeTrainee/{idS}/{idT}", name: 'removeTrainee')]
+    #[Route("/session/{idSession}/unsubscribeTrainee/{idTrainee}", name: 'unsubscribeTrainee')]
     
     // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
     // #[ParamConverter("trainee", options:["mapping"=>["idT"=>"id"]])]
     
-    public function unsubscribeTrainee(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
+    public function unsubscribeTrainee( EntityManagerInterface $entityManager, Session $idSession, Trainee $idTrainee): Response
     {
-        $em = $doctrine->getManager();
-        $session->removeTrainee($trainee);
-        $em->persist($session);
-        $em->flush();
 
-    return $this->redirectToRoute('app_session_show', ['id' => $session->getId()]);
+        $idSession->removeTrainee($idTrainee);
+        $idTrainee->removeSession($idSession);
+        $entityManager->flush();
+
+    return $this->redirectToRoute('app_session_show', ['id' => $idSession->getId()]);
     }  
     
-    #[Route("/session/addTrainee/{idS}/{idI}", name: 'addTrainee')]    
+    #[Route("/session/{idSession}/subsribeTrainee/{idTrainee}", name: 'subsribeTrainee')]    
     // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
     // #[ParamConverter("trainee", options:["mapping"=>["idI"=>"id"]])]
     
-    public function subsribeTrainee(ManagerRegistry $doctrine, Session $session, Trainee $trainee)
+    public function subsribeTrainee(EntityManagerInterface $entityManager, Session $idSession, Trainee $idTrainee): Response
     {
-        $em = $doctrine->getManager();
-        $session->addtrainee($trainee);
-        $em->persist($session);
-        $em->flush();
+        $idSession->addTrainee($idTrainee);
+        $idTrainee->addSession($idSession);
+        $entityManager->persist($idSession);
+        $entityManager->flush();
 
-    return $this->redirectToRoute('app_session_show', ['id' => $session->getId()]);
+    return $this->redirectToRoute('app_session_show', ['id' => $idSession->getId()]);
     }
     
 }

@@ -31,7 +31,7 @@ class SessionRepository extends ServiceEntityRepository
 
         $subQuery = $entityManager->createQueryBuilder();
 
-        // Selects all trainees registered in a session whose id is passed in parameters (sub query)
+        
         $subQuery->select('t.id')
                 ->from('App\Entity\Trainee;
                 ', 't')
@@ -41,7 +41,7 @@ class SessionRepository extends ServiceEntityRepository
 
         $qb = $entityManager->createQueryBuilder();
 
-        // main query (query builder)  : Selects all trained unregistred <=> all trainee listed minus trainee registred in a session
+        
         $qb->select('tr')
         ->from('App\Entity\Trainee;
         ', 'tr')
@@ -52,24 +52,25 @@ class SessionRepository extends ServiceEntityRepository
         //the function returns the result as an array of trainee objects
         return $qb->getQuery()->getResult();
     }
+    //display unregistered trainees //
     public function findByStagiairesNotInSession(int $id)
     {
         $em = $this->getEntityManager(); // get the EntityManager
         $sub = $em->createQueryBuilder(); // create a new QueryBuilder
 
         $qb = $sub; // use the same QueryBuilder for the subquery
-
+        // Selects all trainees registered in a session whose id is passed in parameters (sub query)
         $qb->select('s') // select the root alias
             ->from('App\Entity\Trainee', 's') // the subquery is based on the same entity
             ->leftJoin('s.sessions', 'se') // join the subquery
             ->where('se.id = :id');
 
         $sub = $em->createQueryBuilder(); // create a new QueryBuilder
-
+        //Selects all trained unregistred <=> all trainee listed minus trainee registred in a session
         $sub->select('st')->from('App\Entity\Trainee', 'st')
             ->where($sub->expr()->notIn('st.id', $qb->getDQL()))
             ->setParameter('id', $id);
-
+        //the function returns the result as an array of trainee objects
         return $sub->getQuery()->getResult();
     }
     

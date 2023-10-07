@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter session{% endblock %}
+
+{% block body %}
+    <h2>Ajout d'une nouvelle session à la formation {{ training }}   </h1>
+
+    {{ form_start(form) }}
+    {# {{ form_widget(form) }} #}
+    <div class="row">
+        <div class="col-sm">{{ form_row(form.dateBeginSession, {'label': 'Début de la session : ', 'attr': {'class': 'form-control'} }) }}</div>
+        <div class="col-sm">{{ form_row(form.dateEndSession, {'label': 'Fin de la session : ', 'attr': {'class': 'form-control'} }) }}</div>        
+    </div>
+    <div class="row">
+        <div class="col-sm-2">{{ form_row(form.nbMaxSession, {'label': 'Nombre max de places : ', 'attr': {'class': 'form-control'} }) }}</div>
+        <div class="col-sm-10">{{ training }}</div>        
+    </div>
+
+    <h2>Liste des modules</h2>
+    {# consctruction dynamiques de la liste des modules existants à partir de Programm #}
+    <div class="form-group row ">
+        <div class="col-form-label col-sm-2">&nbsp;</div>
+        <div id="programm-fields-list" class="col-sm-10 remove-collection-widget"
+            data-prototype="{{ form_widget(form.programms.vars.prototype)|e }}"
+            data-session="{{sessionId}}"
+            data-widget-tags="{{ '<p></p>'|e }}"
+            data-widget-counter="{{ form.programms|length }}">
+        {% for programmField in form.programms %}
+            <p>
+                {{ form_errors(programmField) }}
+                {{ form_widget(programmField, {'attr': {'class': 'borders'}}) }}
+            </p>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="form-group row flex-action">
+        <button type="button" 
+            class="add-another-collection-widget button"
+            data-list-selector="#programm-fields-list">Ajouter un nouveau module</button>
+    </div>
+
+ 
+
+    {# empêche l'apparition d'une légende "programmes", si la collection est vide (en cas de création d'une nouvelle session) #}
+    {% do form.programms.setRendered %}
+    <button class="btn btn-outline-success mt-2">{{ button_label|default('Ajouter la session') }}</button>
+{{ form_end(form) }}
+
+
+    <a href="{{ path('app_session_index') }}">Liste des sessions</a>
+{% endblock %}

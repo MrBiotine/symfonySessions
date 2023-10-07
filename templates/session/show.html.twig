@@ -64,7 +64,7 @@
 
     <a href="{{ path('app_session_index') }}">Liste des sessions</a>
 
-    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+    <a class="btn btn-primary" href="{{ path('app_session_edit', {'id': session.id}) }}">Editer la session</a>
 
     {{ include('session/_delete_form.html.twig') }}
 {% endblock %}

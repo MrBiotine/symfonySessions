@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Session;
 use App\Entity\Trainee;
+use App\Entity\Training;
 use App\Form\SessionType;
+use App\Form\SessionAddType;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,7 +25,7 @@ class SessionController extends AbstractController
             'sessions' => $sessionRepository->findAll(),
         ]);
     }
-// add a new session
+// create a new session
     #[Route('/new', name: 'app_session_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -55,7 +57,30 @@ class SessionController extends AbstractController
             'unsubscribedTrainee' => $traineeNotInSession,
         ]);
     }
+    //add a new session to a training
+    #[Route('/{id}/add', name: 'app_session_add', methods: ['GET', 'POST'])]
+    public function addSession(Request $request, Training $training, EntityManagerInterface $entityManager): Response
+    {
+        $session = new Session;
+        $form = $this->createForm(SessionAddType::class, $session);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $training->addSession($session);
+            $entityManager->persist($session);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_session_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('session/addNew.html.twig', [
+            'session' => $session,
+            'training' => $training,
+            'form' => $form,
+            'sessionId' => $session->getId()
+        ]);
+    }
+    //update a existent session
     #[Route('/{id}/edit', name: 'app_session_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Session $session, EntityManagerInterface $entityManager): Response
     {
@@ -90,10 +115,7 @@ class SessionController extends AbstractController
 
     
     #[Route("/session/{idSession}/unsubscribeTrainee/{idTrainee}", name: 'unsubscribeTrainee')]
-    
-    // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
-    // #[ParamConverter("trainee", options:["mapping"=>["idT"=>"id"]])]
-    
+          
     public function unsubscribeTrainee( EntityManagerInterface $entityManager, Session $idSession, Trainee $idTrainee): Response
     {
 
@@ -105,9 +127,7 @@ class SessionController extends AbstractController
     }  
     
     #[Route("/session/{idSession}/subsribeTrainee/{idTrainee}", name: 'subsribeTrainee')]    
-    // #[ParamConverter("session", options:["mapping"=>["idS"=>"id"]])]
-    // #[ParamConverter("trainee", options:["mapping"=>["idI"=>"id"]])]
-    
+        
     public function subsribeTrainee(EntityManagerInterface $entityManager, Session $idSession, Trainee $idTrainee): Response
     {
         $idSession->addTrainee($idTrainee);

@@ -30,6 +30,10 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_category_new') }}">Create new</a>
+    {% if app.user %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="btn btn-primary btn-block" href="{{ path('app_category_new') }}">Ajouter une nouvelle catégorie</a>
+        {% endif %}
+    {% endif %}
+    
 {% endblock %}

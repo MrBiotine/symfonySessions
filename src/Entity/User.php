@@ -20,8 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column]
-    private array $roles = [];
+    #[ORM\Column(length: 50)]
+    private ?string $Pseudo = null;
 
     /**
      * @var string The hashed password
@@ -29,8 +29,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column]
+    private array $roles = [];
+    
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $isTrapp = null;   
 
     public function getId(): ?int
     {
@@ -110,6 +116,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->Pseudo;
+    }
+
+    public function setPseudo(string $Pseudo): static
+    {
+        $this->Pseudo = $Pseudo;
+
+        return $this;
+    }
+
+    public function getIsTrapp(): ?string
+    {
+        return $this->isTrapp;
+    }
+
+    public function setIsTrapp(?string $isTrapp): static
+    {
+        $this->isTrapp = $isTrapp;
 
         return $this;
     }

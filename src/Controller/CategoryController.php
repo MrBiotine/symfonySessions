@@ -23,6 +23,9 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
+    /**
+     * @IsGranted("ROLE_ADMIN", statusCode=404, message="Acces refusé")
+     */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
@@ -50,6 +53,9 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * @IsGranted("ROLE_ADMIN", statusCode=404, message="Acces refusé")
+     */
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {

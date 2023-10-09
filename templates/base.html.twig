@@ -40,15 +40,15 @@
                             </li>
                            {#register login logout#}
                             <li class="nav-item d-flex">
-                                <a class="btn btn-info align-self-center mx-2" href="#">
+                                <a class="btn btn-info align-self-center mx-2" href="{{ path('app_register') }}">
                                     <i class="bi bi-door-open"></i> S'enregister
                                 </a>
                                 {% if app.user %}
-                                    <a class="btn btn-warning align-self-center mx-2" href="#">
+                                    <a class="btn btn-warning align-self-center mx-2" href="{{ path('app_logout') }}">
                                         <i class="bi bi-box-arrow-left"></i> Deconnexion
                                     </a>
                                 {% else %}
-                                <a class="btn btn-warning align-self-center mx-2" href="#">
+                                <a class="btn btn-warning align-self-center mx-2" href="{{ path('app_login') }}">
                                     <i class="bi bi-door-open"></i> Connexion
                                 </a>
                                 {% endif %}

@@ -13,7 +13,48 @@
             <p>En cours de réalisation ...</p>
 
         {% endif %}
-        <h1>HELLO</h1>
+        <div id="accordion">
+
+        <div class="card">
+          <div class="card-header">
+            <a class="btn" data-bs-toggle="collapse" href="#collapseOne">
+              Les sessions passées
+            </a>
+          </div>
+          <div id="collapseOne" class="collapse show" data-bs-parent="#accordion">
+            <div class="card-body">
+              Contenus des sesions passées
+            </div>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseTwo">
+              Les sessions en cours
+            </a>
+          </div>
+          <div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+            <div class="card-body">
+              Lorem ipsum..
+            </div>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-header">
+            <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseThree">
+              Les prochaines sessions
+            </a>
+          </div>
+          <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+            <div class="card-body">
+              Contenu des prochaines sessions
+            </div>
+          </div>
+        </div>
+      
+      </div>         
         
     </div>
 {% endblock %}

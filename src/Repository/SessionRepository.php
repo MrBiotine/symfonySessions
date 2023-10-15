@@ -23,35 +23,56 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
-    //display unregistered trainees //
-    public function getNonSubscriber($session_id)
-    {
-        
-        $entityManager = $this->getEntityManager();
+    //To display past, current and future sessions in the session list
 
-        $subQuery = $entityManager->createQueryBuilder();
+        // 1 Create an SQL query in the DB to implement the mechanism
+        // 2 Adapt this query in the DQL
+        // 3 Create the functions showPast(), showPresent(), showFuture() in the SessionsController.php
+        // 4 Create access paths
+        // href="{{path ('future_session')}}">Future sessions in the twig index view
 
-        
-        $subQuery->select('t.id')
-                ->from('App\Entity\Trainee;
-                ', 't')
-                ->join('t.sessions', 's')
-                ->where('s.id = :id')
-                ->setParameter('id', $session_id);
+    // Below are some DQL queries
 
-        $qb = $entityManager->createQueryBuilder();
+    public function past($dateEndSession): ?array
+    { 
+        /* ----------------------- DQL ------------------                 PAST             ------------------------------------- SQL ------------------------------------*/
 
-        
-        $qb->select('tr')
-        ->from('App\Entity\Trainee;
-        ', 'tr')
-        ->where($qb->expr()->notIn('tr.id', $subQuery->getDQL()))
-        ->orderBy('tr.firstNameTrainee', 'ASC')
-        ->setParameter('id', $session_id);
+        return $this                                                                                            // $entityManager = $this->getEntityManager();
+            ->createQueryBuilder('session')                                                                     // $query = $entityManager->createQuery(                    
+            ->andWhere('session.dateBeginSession < CURRENT_DATE() AND session.dateEndSession < CURRENT_DATE()') // WHERE s.dateBeginSession < CURRENT_DATE() AND s.dateEndSession < CURRENT_DATE()       
+            ->getQuery()                                                                                        // return $query->getResult();
+            ->getResult()
+        ;
 
-        //the function returns the result as an array of trainee objects
-        return $qb->getQuery()->getResult();
     }
+
+    public function present($dateEndSession): ?array
+    { 
+        /* ----------------------- DQL ------------------                 PRESENT             ------------------------------------- SQL ------------------------------------*/
+
+        return $this                                                                                            // $entityManager = $this->getEntityManager();
+            ->createQueryBuilder('session')                                                                     // $query = $entityManager->createQuery(                    
+            ->andWhere('session.dateBeginSession < CURRENT_DATE() AND session.dateEndSession > CURRENT_DATE()') // WHERE s.dateBeginSession < CURRENT_DATE() AND s.dateEndSession < CURRENT_DATE()       
+            ->getQuery()                                                                                        // return $query->getResult();
+            ->getResult()
+        ;
+
+    }
+
+    public function futur($dateBeginSession): ?array
+    { 
+        /* ----------------------- DQL ------------------                 FUTURE             ------------------------------------- SQL ------------------------------------*/
+
+        return $this                                                                                            // $entityManager = $this->getEntityManager();
+            ->createQueryBuilder('session')                                                                     // $query = $entityManager->createQuery(                    
+            ->andWhere('session.dateBeginSession > CURRENT_DATE() AND session.dateEndSession > CURRENT_DATE()') // WHERE s.dateBeginSession > CURDATE() AND session.dateEndSession > CURRENT_DATE()   
+            ->getQuery()                                                                                        // return $query->getResult();
+            ->getResult()
+        ;
+
+    }
+
+       
     //display unregistered trainees //
     public function findByStagiairesNotInSession(int $id)
     {

@@ -6,10 +6,11 @@ use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/category')]
 class CategoryController extends AbstractController
@@ -53,9 +54,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN", statusCode=404, message="Acces refusé")
-     */
+    #[IsGranted('ROLE_ADMIN', message: 'Droit insuffiasant pour cet acces.')]
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
